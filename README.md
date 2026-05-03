@@ -95,6 +95,21 @@ URL=https://example.com
 コマンドライン引数 > .env の値 > コード内のデフォルト値
 ```
 
+## コード品質
+
+[ruff](https://docs.astral.sh/ruff/) によるフォーマットと lint を導入しています。
+
+```bash
+# lint チェック
+uv run ruff check .
+
+# lint 自動修正
+uv run ruff check --fix .
+
+# フォーマット
+uv run ruff format .
+```
+
 ## 実行
 
 ```bash

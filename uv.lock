@@ -3,31 +3,6 @@ revision = 1
 requires-python = ">=3.13"
 
 [[package]]
-name = "browser-task-automation"
-version = "0.1.0"
-source = { virtual = "." }
-dependencies = [
-    { name = "pytest" },
-    { name = "pytest-playwright" },
-    { name = "python-dotenv" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "ruff" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "pytest", specifier = ">=9.0.3" },
-    { name = "pytest-playwright", specifier = ">=0.7.2" },
-    { name = "python-dotenv", specifier = ">=1.2.2" },
-]
-
-[package.metadata.requires-dev]
-dev = [{ name = "ruff", specifier = ">=0.9.0" }]
-
-[[package]]
 name = "certifi"
 version = "2026.4.22"
 source = { registry = "https://pypi.org/simple" }
@@ -267,6 +242,31 @@ sdist = { url = "https://files.pythonhosted.org/packages/82/ed/0301aeeac3e5353ef
 wheels = [
     { url = "https://files.pythonhosted.org/packages/0b/d7/1959b9648791274998a9c3526f6d0ec8fd2233e4d4acce81bbae76b44b2a/python_dotenv-1.2.2-py3-none-any.whl", hash = "sha256:1d8214789a24de455a8b8bd8ae6fe3c6b69a5e3d64aa8a8e5d68e694bbcb285a", size = 22101 },
 ]
+
+[[package]]
+name = "python-pj-template"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "pytest" },
+    { name = "pytest-playwright" },
+    { name = "python-dotenv" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "ruff" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pytest", specifier = ">=9.0.3" },
+    { name = "pytest-playwright", specifier = ">=0.7.2" },
+    { name = "python-dotenv", specifier = ">=1.2.2" },
+]
+
+[package.metadata.requires-dev]
+dev = [{ name = "ruff", specifier = ">=0.9.0" }]
 
 [[package]]
 name = "python-slugify"

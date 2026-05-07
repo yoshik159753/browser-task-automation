@@ -1,6 +1,6 @@
-# browser-task-automation
+# Python-Pj-Template
 
-pytest をタスクランナーとして Playwright を動かす自動化プロジェクトです。
+Python プロジェクトのテンプレートです。
 
 ## 必要環境
 
@@ -13,48 +13,51 @@ pytest をタスクランナーとして Playwright を動かす自動化プロ�
 # 依存パッケージのインストール
 uv sync
 
-# Playwright ブラウザのインストール
+# Playwright ブラウザのインストール（tasks/ を使う場合）
 uv run playwright install chromium
 ```
 
-## タスクの作成
+## ディレクトリ構成
 
-`src/` 以下に `task_*.py` という名前でファイルを作成し、`task_` で始まる関数を定義します。
+```
+src/      # プロジェクト用ソースコード
+tests/    # src/ に対するテスト
+tasks/    # タスク用ソースコード(pytest 検出対象)
+```
+
+## テスト（tests/）
+
+`tests/` 以下に `test_*.py` というファイルを作成し、`test_` で始まる関数を定義します。
 
 ```python
-# src/task_example.py
+# tests/test_example.py
+from src.example import some_func
+
+def test_example() -> None:
+    assert some_func() == "expected"
+```
+
+## タスク（tasks/）
+
+> [!TIP]
+> `tasks/` は `pyproject.toml` の `testpaths` および `.vscode/settings.json` の `pytestArgs` に指定されており、pytest の検出対象になっています。
+
+`tasks/` 以下に `task_*.py` というファイルを作成し、`task_` で始まる関数を定義します。
+
+```python
+# tasks/task_example.py
 from playwright.sync_api import Page
 
-def task_example(page: Page) -> None:
-    page.goto("https://example.com")
+def task_example(page: Page, url: str) -> None:
+    page.goto(url)
 ```
 
-複数セッションが必要な場合（例: ユーザーA・BのチャットなどD）は `Browser` フィクスチャを使います。
+### タスクへの引数追加
+
+`conftest.py` でカスタム引数を定義し、タスク関数のフィクスチャとして受け取ります。
 
 ```python
-# src/task_chat.py
-from playwright.sync_api import Browser
-
-def task_chat(browser: Browser) -> None:
-    context_a = browser.new_context()
-    context_b = browser.new_context()
-
-    page_a = context_a.new_page()
-    page_b = context_b.new_page()
-
-    # それぞれ独立したセッションで操作
-    ...
-
-    context_a.close()
-    context_b.close()
-```
-
-## 引数の定義
-
-`src/conftest.py` でカスタム引数を定義し、タスク関数のフィクスチャとして受け取ります。
-
-```python
-# src/conftest.py
+# conftest.py
 import pytest
 
 def pytest_addoption(parser: pytest.Parser) -> None:
@@ -65,22 +68,13 @@ def url(request: pytest.FixtureRequest) -> str:
     return request.config.getoption("--url")
 ```
 
-```python
-# src/task_example.py
-from playwright.sync_api import Page
-
-def task_example(page: Page, url: str) -> None:
-    page.goto(url)
-```
-
-引数は `--username`、`--password` など任意のオプションを同じ方法で追加できます。
+`--username`、`--password` など任意のオプションを同じ方法で追加できます。
 
 ## 環境変数
 
 引数のデフォルト値は `.env` ファイルで管理できます。
 
 ```bash
-# .env.example をコピーして作成
 cp .env.example .env
 ```
 
@@ -95,33 +89,25 @@ URL=https://example.com
 コマンドライン引数 > .env の値 > コード内のデフォルト値
 ```
 
+## テスト/タスク実行
+
+```bash
+# すべてのテスト・タスクを実行
+uv run pytest
+
+# テストのみ実行
+uv run pytest tests/
+
+# タスクのみ実行
+uv run pytest tasks/task_hello.py --headed --url https://google.com
+```
+
 ## コード品質
 
 [ruff](https://docs.astral.sh/ruff/) によるフォーマットと lint を導入しています。
 
 ```bash
-# lint チェック
-uv run ruff check .
-
-# lint 自動修正
-uv run ruff check --fix .
-
-# フォーマット
-uv run ruff format .
-```
-
-## 実行
-
-```bash
-# すべてのタスクを実行（headless）
-uv run pytest
-
-# ブラウザを表示して実行（headed）
-uv run pytest --headed
-
-# 特定のタスクファイルのみ実行
-uv run pytest src/task_hello.py --headed
-
-# 引数を指定して実行
-uv run pytest src/task_hello.py --headed --url https://google.com
+uv run ruff check .           # lint チェック
+uv run ruff check --fix .     # lint 自動修正
+uv run ruff format .          # フォーマット
 ```

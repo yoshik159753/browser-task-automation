@@ -1,10 +1,10 @@
 [tool.pytest.ini_options]
-testpaths = ["src"]
-python_files = ["task_*.py"]
-python_functions = ["task_*"]
+testpaths = ["tests", "tasks"]
+python_files = ["test_*.py", "task_*.py"]
+python_functions = ["test_*", "task_*"]
 
 [project]
-name = "browser-task-automation"
+name = "python-pj-template"
 version = "0.1.0"
 description = "Add your description here"
 requires-python = ">=3.13"
